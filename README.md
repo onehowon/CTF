@@ -28,3 +28,7 @@
 ## 리소스를 가져오라는 메소드
 # POST
 ## 리소스로 데이터를 보내라는 메소드
+
+# HTTPS(HTTP over Secure socket layer)
+## TLS(Transport Layer Security) 프로토콜을 도입하여 서버와 클라이언트 사이에 오가는 모든 HTTP 메시지를 암호화
+
