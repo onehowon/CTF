@@ -15,6 +15,7 @@ except:
 
 def read_url(url, cookie={"name": "name", "value": "value"}):
     cookie.update({"domain": "127.0.0.1"})
+    # 로컬 호스트 환경에서 웹 페이지를 접속한다.
     try:
         options = webdriver.ChromeOptions()
         for _ in [
@@ -30,6 +31,7 @@ def read_url(url, cookie={"name": "name", "value": "value"}):
         driver.set_page_load_timeout(3)
         driver.get("http://127.0.0.1:8000/")
         driver.add_cookie(cookie)
+        # 접속한 웹 페이지 내 매개변수로 받아온 cookie를 추가
         driver.get(url)
     except Exception as e:
         driver.quit()
@@ -41,6 +43,7 @@ def read_url(url, cookie={"name": "name", "value": "value"}):
 
 def check_xss(param, cookie={"name": "name", "value": "value"}):
     url = f"http://127.0.0.1:8000/vuln?param={urllib.parse.quote(param)}"
+    # 매개변수로 받아온 xss 값을 이용해 xss 페이지 접속
     return read_url(url, cookie)
 
 
