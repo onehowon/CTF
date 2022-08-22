@@ -32,3 +32,26 @@
 # HTTPS(HTTP over Secure socket layer)
 ## TLS(Transport Layer Security) 프로토콜을 도입하여 서버와 클라이언트 사이에 오가는 모든 HTTP 메시지를 암호화
 
+# 웹 리소스
+## 웹에 갖춰진 정보 자산
+### dreamhack.io/index.html 입력시 dreamhack.io에 존재하는 모든 index.html 정보를 긁어옴
+
+# HTML
+## 웹 문서의 뼈와 살을 담당
+## 태그와 속성을 통한 구조화된 문서 작성을 지원합니다.
+
+# CSS
+## 웹 문서의 생김새를 지정합니다.
+## 웹 리소스들의 시각화 방법을 기재한 스타일 시트입니다.
+
+# JavaScript(JS)
+## 웹 문서의 동작을 정의합니다.
+## 클라이언트가 실행하는 코드라고하여 Client-Side Script라고도 부릅니다.
+
+# Domain Name Server(DNS)
+## Domain Name을 질의하고, DNS 응답한 IP Address를 사용합니다.
+
+# 웹 렌더링
+## 서버로부터 받은 리소스를 이용자에게 시각화하는 행위
+## 서버의 응답을 받은 웹 브라우저는 리소스의 타입을 확인하고, 적절한 방식으로 이용자에게 전달한다.
+## ex) 서버로부터 HTML / CSS를 받으면 HTML을 파싱하고 CSS를 적용해 이용자에게 보여줌
