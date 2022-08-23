@@ -104,3 +104,10 @@
 
 ## SQL injection: SQL 쿼리에 이용자의 입력 값을 삽입해 이용자가 원하는 쿼리를 실행할 수 있는 취약점
 ## Blind SQL Injection: 데이터베이스 조회 후 결과를 직접적으로 확인할 수 없는 경우 사용할 수 있는 SQL injection 공격 기법
+
+# 비관계형 DB
+## 비관계형 데이터베이스(NoSQL): SQL을 사용해 데이터를 조회/추가/삭제하는 관계형 데이터베이스(RDBMS)와 달리 SQL을 사용하지 않으며, 이에 따라 RDBMS와는 달리 복잡하지 않은 데이터를 다루는 것이 큰 특징이자 RDBMS와의 차이점
+## 콜렉션(Collection): 데이터베이스의 하위에 속하는 개념
+
+## NoSQL injection: 요청 구문에 이용자의 입력 값을 삽입해 이용자가 원하는 요청을 실행할 수 있는 취약점
+## Blind NoSQL Injection: 데이터 조회 후 결과를 직접적으로 확인할 수 없는 경우 사용될 수 있는 NoSQL Injection 공격 기법
