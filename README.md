@@ -111,3 +111,5 @@
 
 ## NoSQL injection: 요청 구문에 이용자의 입력 값을 삽입해 이용자가 원하는 요청을 실행할 수 있는 취약점
 ## Blind NoSQL Injection: 데이터 조회 후 결과를 직접적으로 확인할 수 없는 경우 사용될 수 있는 NoSQL Injection 공격 기법
+
+## NoSQL Injection: NoSQL DBMS가 악의적인 쿼리를 실행하게 하는 공격 기법.
