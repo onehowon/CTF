@@ -17,7 +17,7 @@
 ![image](https://user-images.githubusercontent.com/81984723/186337816-a16b2dec-b64a-4aef-b488-b39c07584c12.png)
 
 
-## STEP3. 문제풀이
+## STEP2. 문제풀이
 ### (1) DBMS 종류의 확인
 #### 해당 문제는 DB에 대한 기초지식이 없으면 접근 난이도가 어려워진다는 것을 깨닫고, 어떤 DB를 사용했는지 의문을 가졌다.
 #### 우선 MySQL에 포커스를 두고 테스트를 진행하였다.
