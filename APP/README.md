@@ -21,7 +21,7 @@ session_storage = {
 }
 
 
-@app.route('/')
+app.route('/')
 def index():
     session_id = request.cookies.get('sessionid', None)
     try:
@@ -33,7 +33,7 @@ def index():
     return render_template('index.html', text=f'Hello {username}, {"flag is " + FLAG if username == "admin" else "you are not admin"}')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
@@ -54,7 +54,7 @@ def login():
         return '<script>alert("wrong password");history.go(-1);</script>'
 
 
-@app.route('/admin')
+app.route('/admin')
 def admin():
     # what is it? Does this page tell you session? 
     # It is weird... TODO: the developer should add a routine for checking privilege 
