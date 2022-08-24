@@ -1,4 +1,4 @@
-# LEVEL1 CSRF-1
+# LEVEL1 CSRF-2
 ### 문제 정보 : 여러 기능과 입력받은 URL을 확인하는 봇이 구현된 서비스입니다. CSRF 취약점을 이용해 플래그를 획득하세요.
 ----------------------------------------------------------------------------------------------
 ## STEP1 코드리뷰.
@@ -22,9 +22,15 @@
 ##### except:
 #####    FLAG = "[**FLAG**]"
 
+### (1) 계정은 guest와 admin 두개이다.
+---------------------------------------------------------------------------------------------
+##### users = {
+#####    'guest': 'guest',
+#####    'admin': FLAG
+##### }
+
 
 ### (1) 웹 구현을 위한 셀레늄 모듈을 활용한 구문이다.
-### (2) 페이지는 XSS 페이지와 별 차이가 없다.
 ---------------------------------------------------------------------------------------------
 ##### def read_url(url, cookie={"name": "name", "value": "value"}):
 #####    cookie.update({"domain": "127.0.0.1"})
@@ -52,7 +58,7 @@
 #####    return True
 
 
-### (1) url 구문에서 param에 알맞은 값을 입력해야만 flag를 준다.
+### (1) 파라미터 값 구문
 ---------------------------------------------------------------------------------------------
 ##### def check_csrf(param, cookie={"name": "name", "value": "value"}):
 #####    url = f"http://127.0.0.1:8000/vuln?param={urllib.parse.quote(param)}"
@@ -62,10 +68,17 @@
 ----------------------------------------------------------------------------------------------
 ##### @app.route("/")
 ##### def index():
-#####    return render_template("index.html")
+#####    session_id = request.cookies.get('sessionid', None)
+#####    try:
+#####        username = session_storage[session_id]
+#####    except KeyError:
+#####        return render_template('index.html', text='please login')
+
+#####    return render_template('index.html', text=f'Hello {username}, {"flag is " + FLAG if username == "admin" else "you are not an admin"}')
 
 
 ### (1) 웹을 구성하는 CODE LINE
+### (2) 이번 문제에서도 vuln 사이트는 script 구문이 막혀 필요 없을 것 같다.
 ---------------------------------------------------------------------------------------------
 ##### @app.route("/vuln")
 ##### def vuln():
@@ -83,68 +96,66 @@
 #####        return render_template("flag.html")
 #####    elif request.method == "POST":
 #####        param = request.form.get("param", "")
-#####        if not check_csrf(param):
+#####        session_id = os.urandom(16).hex()
+#####       session_storage[session_id] = 'admin'
+#####        if not check_csrf(param, {"name":"sessionid", "value": session_id}):
 #####            return '<script>alert("wrong??");history.go(-1);</script>'
 
-#####        return '<script>alert("good");history.go(-1);</script>
-
-
-##### memo_text = ""
+#####        return '<script>alert("good");history.go(-1);</script>'
 
 ### (1) 웹을 구성하는 CODE LINE
+### (2) 로그인 화면을 구상하는 구문으로 admin으로 로그인해야만 플래그 값을 준다.
 ----------------------------------------------------------------------------------------------
-##### @app.route("/memo")
-##### def memo():
-#####    global memo_text
-#####    text = request.args.get("memo", None)
-#####    if text:
-#####        memo_text += text
-#####    return render_template("memo.html", memo=memo_text)
+##### @app.route('/login', methods=['GET', 'POST'])
+##### def login():
+#####    if request.method == 'GET':
+#####        return render_template('login.html')
+#####    elif request.method == 'POST':
+#####        username = request.form.get('username')
+#####        password = request.form.get('password')
+#####        try:
+#####            pw = users[username]
+#####        except:
+#####            return '<script>alert("not found user");history.go(-1);</script>'
+#####        if pw == password:
+#####            resp = make_response(redirect(url_for('index')) )
+#####            session_id = os.urandom(8).hex()
+#####            session_storage[session_id] = username
+#####            resp.set_cookie('sessionid', session_id)
+#####            return resp 
+#####        return '<script>alert("wrong password");history.go(-1);</script>'
 
-### (1) 웹을 구성하는 CODE LINE
-### (2) 메모에 플래그를 작성하는 기능을 가진 함수로 주어진 도메인으로 접속하지 않을시 Access Denied, 유저id로 로그인하지 않을시 Access Denied2가 출력된다.
-### (3) 전역 변수인 memo_text에 의해 메모에 플래그 값이 출력된다.
+### (1) change_password : pw 입력란에 비밀번호를 변경할 수 있는 함수
+### (2) 위 로그인 창과 같이 admin 계정을 얻을 수 있는 파라미터 값을 보내야 할 듯하다.
 ----------------------------------------------------------------------------------------------
-##### @app.route("/admin/notice_flag")
-##### def admin_notice_flag():
-#####    global memo_text
-#####    if request.remote_addr != "127.0.0.1":
-#####        return "Access Denied"
-#####    if request.args.get("userid", "") != "admin":
-#####        return "Access Denied 2"
-#####    memo_text += f"[Notice] flag is {FLAG}\n"
-#####    return "Ok"
+##### @app.route("/change_password")
+##### def change_password():
+#####    pw = request.args.get("pw", "")
+#####    session_id = request.cookies.get('sessionid', None)
+#####    try:
+#####        username = session_storage[session_id]
+#####    except KeyError:
+#####        return render_template('index.html', text='please login')
 
+#####    users[username] = pw
+#####    return 'Done'
 
 ##### app.run(host="0.0.0.0", port=8000)
 
 ## STEP3. 문제풀이
-### (1) vuln 페이지 확인
-#### vuln 페이지는 파라미터에 스크립트 alert를 넣어 서버에 요청을 보냈으나 alert(1)이 페이지에 출력 되었다.
-#### notice_flag 함수에 따르면 플래그 획득을 위해서는 127.0.0.1 도메인으로 접근을 해야 하므로 vuln 페이지의 파라미터를 이용해 접근을 시도해보았다.
-#### 플래그가 나오지 않는 점을 보아 vuln 페이지로 접근하는 것은 아니라는 결론에 도달했다.
+### (1) 세션 접속
+#### guest 계정을 통해 세션에 접근해야한다.(change_password를 활용하기 위해서는 sessionID가 필요하기 때문에)
 ----------------------------------------------------------------------------------------------
-![image](https://user-images.githubusercontent.com/81984723/186331013-100182f6-6b18-4273-ae0c-2a75089f6776.png)
-![image](https://user-images.githubusercontent.com/81984723/186331340-4840fc1a-8e2e-47d1-9492-0e1134243a7a.png)
-![image](https://user-images.githubusercontent.com/81984723/186331417-a95bf8b7-ba25-4e21-9465-7674e18bf5eb.png)
+![image](https://user-images.githubusercontent.com/81984723/186336759-f50be938-e2a6-4045-8732-db895588f90d.png)
 
-
-### (2) 코드 재분석
-#### vuln 페이지 코드를 보면, xss_filter 라는 기능이 있다. 해당 기능이 script문을 필터링 하고 있었기에 XSS를 시도해도 먹히질 않는 것이었다.
-#### admin_notice_flag 함수는 유저명이 admin일 경우에만 memo_text 전역 변수에 flag를 넣어준다고 했었기에 flag 페이지에 이미지 태그를 이용해 src 속성에 admin_notice_flag 페이지를 요청하는 것이 바람직해보였다.
-#### read_url 함수를 잘 이용하면 셀레늄 모듈이 admin_notice_flag 페이지로 이동시켜줄 것이라 예상했다.
+### (2) 공격 코드 짜기
+#### CSRF-1과 같이 HTML의 이미지 태그를 통해 접근하기로 하였다.
+#### change_password란 뒤에는 패스워드를 admin으로 변경하겠다는 파라미터를 전달한다.
 ----------------------------------------------------------------------------------------------
-![image](https://user-images.githubusercontent.com/81984723/186331636-3442317b-2eca-4511-8b13-1a630edd91e8.png)
-![image](https://user-images.githubusercontent.com/81984723/186331904-69b8aa50-2992-421f-b2e0-36bec4dfb857.png)
+![image](https://user-images.githubusercontent.com/81984723/186337146-38a53461-1034-43d2-9c4d-7fa8e3810c3f.png)
 
 
-### (3) 플래그 페이지를 통한 접근
-#### 플래그 페이지의 URL의 admin/notice_flag 구문을 이용해 세션값을 admin으로 임의설정하여 이미지 태그로 접근해보았다.
+### (3) 계정 확인 및 플래그 획득
 ----------------------------------------------------------------------------------------------
-![image](https://user-images.githubusercontent.com/81984723/186332230-ddfd01f6-9fad-4532-a2d3-57ef5f91fb16.png)
-![image](https://user-images.githubusercontent.com/81984723/186332339-2f812294-3d77-4804-ab19-37320e127634.png)
-
-### (4) 플래그 획득
-----------------------------------------------------------------------------------------------
-![image](https://user-images.githubusercontent.com/81984723/186332414-3cd5c648-3e7b-4b69-9b9c-b50300590807.png)
-
+![image](https://user-images.githubusercontent.com/81984723/186337228-68cbb26a-957f-4b93-98be-ddc5d77d7982.png)
+![image](https://user-images.githubusercontent.com/81984723/186337265-73f8d0c9-7774-4d96-878e-fc46ebd24585.png)
