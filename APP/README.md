@@ -29,14 +29,14 @@
 ### (2)아래 highlight 된 부분을 통해 admin 계정을 통해서만 flag 값을 추출할 수 있음을 알 수 있다.
 ##### @app.route('/')
 ##### def index():
-#####     <span style='backgrund-color: #fff5b1'>session_id = request.cookies.get('sessionid', None)</span>
+     <span style='backgrund-color: #fff5b1'>session_id = request.cookies.get('sessionid', None)</span>
 #####     try:
 #####         # get username from session_storage 
 #####         username = session_storage[session_id]
 #####     except KeyError:
 #####         return render_template('index.html')
 
-#####     <span style='backgrund-color: #fff5b1'>return render_template('index.html', text=f'Hello {username}, {"flag is " + FLAG if username == "admin" else "you are not admin"}')</span>
+     <span style='backgrund-color: #fff5b1'>return render_template('index.html', text=f'Hello {username}, {"flag is " + FLAG if username == "admin" else "you are not admin"}')</span>
 
 ----------------------------------------------------------------------------------------------
 ### (1) 위 코드를 통해 쿠키 값에서 알아낸 세션 아이디를 가지고 변조하여 admin 계정의 패스워드를 알아낼 수 있다.
