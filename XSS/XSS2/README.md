@@ -107,7 +107,13 @@
 ![image](https://user-images.githubusercontent.com/81984723/186301696-775018f7-2286-4d1f-ab62-395465a5ad66.png)
 
 ### (2) 타 우회방법 조회
-#### 버그 바운티라는 사이트
+#### 버그 바운티라는 사이트를 통해 XSS의 다른 공격 구문을 파악
+#### img(2) 공격 구문을 입력
 ----------------------------------------------------------------------------------------------
-![image](https://user-images.githubusercontent.com/81984723/186299438-4f716a05-9bb3-4499-bdef-b23a31460fb3.png)
+![image](https://user-images.githubusercontent.com/81984723/186328177-db1b5f24-15fd-4a69-864d-ab7850540595.png)
+![image](https://user-images.githubusercontent.com/81984723/186328349-1a88935b-205c-4e81-869c-87dceda9059c.png)
+
+### (3) 플래그 획득
+#### 공격 구문 입력 후 memo 페이지로 이동하면 플래그가 정상적으로 출력되는 것을 볼 수 있다.
 ----------------------------------------------------------------------------------------------
+![image](https://user-images.githubusercontent.com/81984723/186328479-fd5d67e8-fcc9-423a-bf09-92b38776b031.png)
