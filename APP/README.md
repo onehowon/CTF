@@ -3,9 +3,9 @@
 
 ## STEP1 코드리뷰.
 #!/usr/bin/python3
-# from flask import Flask, request, render_template, make_response, redirect, url_for
+##### from flask import Flask, request, render_template, make_response, redirect, url_for
 
-# app = Flask(__name__)
+##### app = Flask(__name__)
 
 # try:
 #     FLAG = open('./flag.txt', 'r').read()
