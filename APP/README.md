@@ -2,7 +2,7 @@
 ### 문제 정보 : 쿠키로 인증 상태를 관리하는 간단한 로그인 서비스입니다. admin 계정으로 로그인에 성공하면 플래그를 획득할 수 있습니다.
 
 ## STEP1 코드리뷰.
-<p>from flask import Flask, request, render_template, make_response, redirect, url_for
+<!-- from flask import Flask, request, render_template, make_response, redirect, url_for
 
 app = Flask(__name__)
 
@@ -17,8 +17,6 @@ users = {
     'admin': FLAG
 }
 
-
-# this is our session storage 
 session_storage = {
 }
 
@@ -69,4 +67,4 @@ if __name__ == '__main__':
     # and also you cannot reveal admin's sesseionid by brute forcing!!! haha
     session_storage[os.urandom(32).hex()] = 'admin'
     print(session_storage)
-    app.run(host='0.0.0.0', port=8000)</p>
+    app.run(host='0.0.0.0', port=8000) -->
